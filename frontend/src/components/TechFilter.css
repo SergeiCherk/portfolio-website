@@ -1,0 +1,26 @@
+.tech-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tech-filter__item {
+  border: 1px solid #d5d5d5;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.tech-filter__item:hover {
+  border-color: #999;
+}
+
+.tech-filter__item--active {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+}
