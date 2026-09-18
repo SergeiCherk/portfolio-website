@@ -3,8 +3,8 @@ from django.db import models
 
 class TechStack(models.Model):
     """Тег технологии (React, Django, PostgreSQL и т.д.)"""
-    name = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(max_length=50, unique=True, blank=True)
+    name = models.CharField("Название", max_length=50, unique=True)
+    slug = models.SlugField("Slug (для URL и фильтра)", max_length=50, unique=True, blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -23,34 +23,39 @@ class TechStack(models.Model):
 
 class Project(models.Model):
     """Проект в портфолио"""
-    title = models.CharField(max_length=120)
-    slug = models.SlugField(max_length=140, unique=True, blank=True)
+    title = models.CharField("Название", max_length=120)
+    slug = models.SlugField("Slug (для URL)", max_length=140, unique=True, blank=True)
     short_description = models.CharField(
+        "Краткое описание",
         max_length=250,
-        help_text="Краткое описание для карточки проекта"
+        help_text="Показывается на карточке проекта в списке"
     )
     description = models.TextField(
-        help_text="Полное описание, показывается на странице проекта"
+        "Полное описание",
+        help_text="Показывается на странице проекта"
     )
-    github_url = models.URLField(blank=True)
-    live_url = models.URLField(blank=True, help_text="Ссылка на живую версию проекта, если есть")
+    github_url = models.URLField("Ссылка на GitHub", blank=True)
+    live_url = models.URLField("Ссылка на живую версию", blank=True, help_text="Если проект где-то развёрнут")
     cover_image = models.ImageField(
+        "Обложка",
         upload_to="projects/covers/",
         blank=True,
         null=True,
         help_text="Главное фото для карточки проекта"
     )
-    tech_stack = models.ManyToManyField(TechStack, related_name="projects", blank=True)
+    tech_stack = models.ManyToManyField(TechStack, related_name="projects", blank=True, verbose_name="Технологии")
     is_featured = models.BooleanField(
+        "Показывать на главной",
         default=False,
-        help_text="Показывать на главной странице"
+        help_text="Проект попадёт в блок «Лучшие проекты» на главной странице"
     )
     order = models.PositiveIntegerField(
+        "Порядок сортировки",
         default=0,
         help_text="Чем меньше число, тем выше в списке"
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField("Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField("Дата обновления", auto_now=True)
 
     class Meta:
         ordering = ["order", "-created_at"]
@@ -69,10 +74,10 @@ class Project(models.Model):
 
 class ProjectImage(models.Model):
     """Дополнительные фото проекта (галерея на странице проекта)"""
-    project = models.ForeignKey(Project, related_name="gallery", on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="projects/gallery/")
-    caption = models.CharField(max_length=200, blank=True)
-    order = models.PositiveIntegerField(default=0)
+    project = models.ForeignKey(Project, related_name="gallery", on_delete=models.CASCADE, verbose_name="Проект")
+    image = models.ImageField("Изображение", upload_to="projects/gallery/")
+    caption = models.CharField("Подпись", max_length=200, blank=True)
+    order = models.PositiveIntegerField("Порядок", default=0)
 
     class Meta:
         ordering = ["order"]

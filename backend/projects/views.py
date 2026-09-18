@@ -29,6 +29,10 @@ class ProjectListView(generics.ListAPIView):
             if tech_slugs:
                 queryset = queryset.filter(tech_stack__slug__in=tech_slugs).distinct()
 
+        featured = self.request.query_params.get("featured")
+        if featured == "true":
+            queryset = queryset.filter(is_featured=True)
+
         return queryset
 
 
