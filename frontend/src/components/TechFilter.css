@@ -2,12 +2,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 }
 
 .tech-filter__item {
-  border: 1px solid #d5d5d5;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-ink);
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 0.85rem;
@@ -16,11 +17,11 @@
 }
 
 .tech-filter__item:hover {
-  border-color: #999;
+  border-color: var(--color-accent);
 }
 
 .tech-filter__item--active {
-  background: #222;
-  color: #fff;
-  border-color: #222;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border-color: var(--color-accent);
 }

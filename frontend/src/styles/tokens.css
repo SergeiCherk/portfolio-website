@@ -1,0 +1,119 @@
+/* ==========================================================
+   ДИЗАЙН-ТОКЕНЫ
+   Меняешь цвет здесь — меняется по всему сайту.
+   ========================================================== */
+
+:root {
+  /* --- Светлая тема (по умолчанию) --- */
+  --color-bg: #edefea;
+  --color-surface: #ffffff;
+  --color-ink: #171a18;
+  --color-ink-soft: #4b524d;
+  --color-border: #d7dbd2;
+  --color-accent: #2f6b52;
+  --color-accent-ink: #ffffff;
+  --color-tag-bg: #f2e6d3;
+  --color-tag-ink: #8a5417;
+
+  /* --- Типографика --- */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  --max-width: 1080px;
+}
+
+[data-theme="dark"] {
+  --color-bg: #12181a;
+  --color-surface: #1a2224;
+  --color-ink: #e7ece8;
+  --color-ink-soft: #a6b0aa;
+  --color-border: #2a3436;
+  --color-accent: #6fc2a0;
+  --color-accent-ink: #0d1512;
+  --color-tag-bg: #2c2620;
+  --color-tag-ink: #e0a458;
+}
+
+/* Уважаем системную тему, если пользователь ещё не выбрал вручную */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #12181a;
+    --color-surface: #1a2224;
+    --color-ink: #e7ece8;
+    --color-ink-soft: #a6b0aa;
+    --color-border: #2a3436;
+    --color-accent: #6fc2a0;
+    --color-accent-ink: #0d1512;
+    --color-tag-bg: #2c2620;
+    --color-tag-ink: #e0a458;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+
+/* Видимый фокус для клавиатурной навигации — не убираем ради красоты */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Прижимаем подвал к низу экрана, даже если контента на странице мало */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1 0 auto;
+}

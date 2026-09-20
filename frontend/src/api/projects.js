@@ -1,13 +1,14 @@
 import request from "./client";
 
 /**
- * Получить список проектов с опциональным поиском и фильтром по стеку.
- * @param {{ search?: string, tech?: string[] }} params
+ * Получить список проектов с опциональным поиском, фильтром по стеку и признаком "избранное".
+ * @param {{ search?: string, tech?: string[], featured?: boolean }} params
  */
-export function fetchProjects({ search = "", tech = [] } = {}) {
+export function fetchProjects({ search = "", tech = [], featured = false } = {}) {
   const query = new URLSearchParams();
   if (search) query.set("search", search);
   if (tech.length) query.set("tech", tech.join(","));
+  if (featured) query.set("featured", "true");
 
   const qs = query.toString();
   return request(`/projects/${qs ? `?${qs}` : ""}`);

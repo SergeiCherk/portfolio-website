@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom";
 import "./ProjectCard.css";
 
+/** Карточка проекта для сетки на странице /projects. Ведёт на страницу проекта. */
 export default function ProjectCard({ project }) {
   return (
     <Link to={`/projects/${project.slug}`} className="project-card">
-      {project.cover_image && (
+      {project.cover_image ? (
         <img
           className="project-card__image"
           src={project.cover_image}
           alt={project.title}
         />
+      ) : (
+        <div className="project-card__image project-card__image--placeholder" aria-hidden="true" />
       )}
       <div className="project-card__body">
         <h3 className="project-card__title">{project.title}</h3>

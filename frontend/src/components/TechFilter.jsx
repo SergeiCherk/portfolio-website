@@ -1,5 +1,6 @@
 import "./TechFilter.css";
 
+/** Ряд тегов-кнопок для фильтра проектов по технологиям (можно выбрать несколько). */
 export default function TechFilter({ options, selected, onToggle }) {
   return (
     <div className="tech-filter">

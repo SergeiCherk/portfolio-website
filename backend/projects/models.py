@@ -1,4 +1,16 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
+
+ALLOWED_IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "gif"]
+MAX_IMAGE_SIZE_MB = 5
+
+
+def validate_image_size(file):
+    """Отклоняет файлы тяжелее MAX_IMAGE_SIZE_MB — защита от заливки гигантских файлов."""
+    limit_bytes = MAX_IMAGE_SIZE_MB * 1024 * 1024
+    if file.size > limit_bytes:
+        raise ValidationError(f"Файл слишком большой — максимум {MAX_IMAGE_SIZE_MB} МБ.")
 
 
 class TechStack(models.Model):
@@ -41,7 +53,8 @@ class Project(models.Model):
         upload_to="projects/covers/",
         blank=True,
         null=True,
-        help_text="Главное фото для карточки проекта"
+        help_text=f"Главное фото для карточки проекта. Форматы: {', '.join(ALLOWED_IMAGE_EXTENSIONS)}. До {MAX_IMAGE_SIZE_MB} МБ.",
+        validators=[FileExtensionValidator(ALLOWED_IMAGE_EXTENSIONS), validate_image_size],
     )
     tech_stack = models.ManyToManyField(TechStack, related_name="projects", blank=True, verbose_name="Технологии")
     is_featured = models.BooleanField(
@@ -75,7 +88,12 @@ class Project(models.Model):
 class ProjectImage(models.Model):
     """Дополнительные фото проекта (галерея на странице проекта)"""
     project = models.ForeignKey(Project, related_name="gallery", on_delete=models.CASCADE, verbose_name="Проект")
-    image = models.ImageField("Изображение", upload_to="projects/gallery/")
+    image = models.ImageField(
+        "Изображение",
+        upload_to="projects/gallery/",
+        help_text=f"Форматы: {', '.join(ALLOWED_IMAGE_EXTENSIONS)}. До {MAX_IMAGE_SIZE_MB} МБ.",
+        validators=[FileExtensionValidator(ALLOWED_IMAGE_EXTENSIONS), validate_image_size],
+    )
     caption = models.CharField("Подпись", max_length=200, blank=True)
     order = models.PositiveIntegerField("Порядок", default=0)
 

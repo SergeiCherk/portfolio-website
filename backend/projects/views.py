@@ -7,9 +7,14 @@ from .serializers import ProjectDetailSerializer, ProjectListSerializer, TechSta
 
 class ProjectListView(generics.ListAPIView):
     """
-    GET /api/projects/
-    GET /api/projects/?search=названиеИлиОписание
-    GET /api/projects/?tech=react,django   (slug технологий через запятую)
+    Список проектов с необязательными фильтрами через query-параметры:
+
+        GET /api/projects/                          — все проекты
+        GET /api/projects/?search=текст              — поиск по названию/описанию
+        GET /api/projects/?tech=react,django          — только с этими тегами стека
+        GET /api/projects/?featured=true              — только отмеченные "избранными"
+
+    Параметры можно комбинировать.
     """
     serializer_class = ProjectListSerializer
 
@@ -29,8 +34,7 @@ class ProjectListView(generics.ListAPIView):
             if tech_slugs:
                 queryset = queryset.filter(tech_stack__slug__in=tech_slugs).distinct()
 
-        featured = self.request.query_params.get("featured")
-        if featured == "true":
+        if self.request.query_params.get("featured") == "true":
             queryset = queryset.filter(is_featured=True)
 
         return queryset

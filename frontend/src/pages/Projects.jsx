@@ -4,6 +4,7 @@ import ProjectCard from "../components/ProjectCard";
 import TechFilter from "../components/TechFilter";
 import "./Projects.css";
 
+/** Каталог проектов: живой поиск с debounce и множественный фильтр по стеку. */
 export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [techOptions, setTechOptions] = useState([]);
@@ -36,6 +37,7 @@ export default function Projects() {
     return () => clearTimeout(timeoutId);
   }, [search, selectedTech]);
 
+  // Добавляет/убирает тег из фильтра — можно выбрать сразу несколько технологий
   function toggleTech(slug) {
     setSelectedTech((prev) =>
       prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]

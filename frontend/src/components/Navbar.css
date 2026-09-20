@@ -1,28 +1,150 @@
 .navbar {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
-  border-bottom: 1px solid #eaeaea;
+  padding: 20px 5vw;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .navbar__brand {
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: 1.1rem;
+  text-decoration: none;
+  color: var(--color-ink);
+  z-index: 2;
+}
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 2;
 }
 
 .navbar__links {
   display: flex;
-  gap: 24px;
+  align-items: center;
+  gap: 28px;
 }
 
 .navbar__links a {
   text-decoration: none;
-  color: #444;
-  font-size: 0.95rem;
+  color: var(--color-ink-soft);
+  font-size: 0.92rem;
 }
 
 .navbar__links a.active {
-  color: #000;
-  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.navbar__theme-toggle {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.navbar__theme-toggle:hover {
+  border-color: var(--color-accent);
+}
+
+/* Бургер скрыт на десктопе */
+.navbar__burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  cursor: pointer;
+  padding: 0;
+}
+
+.navbar__burger span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  margin: 0 auto;
+  background: var(--color-ink);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar__burger--open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar__burger--open span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__burger--open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.navbar__backdrop {
+  position: fixed;
+  inset: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.25);
+  border: none;
+  z-index: 1;
+  cursor: default;
+}
+
+/* ---- Мобильная раскладка ---- */
+@media (max-width: 640px) {
+  .navbar__burger {
+    display: flex;
+    width: 40px;
+    height: 40px;
+  }
+
+  .navbar__theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .navbar__links {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 8px 5vw 16px;
+    transform-origin: top;
+    transform: scaleY(0);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .navbar__links--open {
+    transform: scaleY(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .navbar__links a {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1rem;
+  }
 }

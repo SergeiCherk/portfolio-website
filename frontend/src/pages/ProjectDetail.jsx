@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { fetchProject } from "../api/projects";
+import Lightbox from "../components/Lightbox";
 import "./ProjectDetail.css";
 
+/** Страница одного проекта: описание, ссылки и лента фото с лайтбоксом. */
 export default function ProjectDetail() {
   const { slug } = useParams();
   const [project, setProject] = useState(null);
   const [error, setError] = useState(null);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
 
   useEffect(() => {
     fetchProject(slug)
@@ -25,6 +28,12 @@ export default function ProjectDetail() {
 
   if (!project) return <p style={{ padding: 32 }}>Загрузка...</p>;
 
+  // Обложка + галерея — вместе, одной лентой, в едином формате для лайтбокса
+  const photos = [
+    ...(project.cover_image ? [{ src: project.cover_image, caption: "" }] : []),
+    ...(project.gallery ?? []).map((img) => ({ src: img.image, caption: img.caption })),
+  ];
+
   return (
     <section className="project-detail">
       <Link to="/projects" className="project-detail__back">
@@ -33,10 +42,6 @@ export default function ProjectDetail() {
 
       <h1>{project.title}</h1>
 
-      {project.cover_image && (
-        <img className="project-detail__cover" src={project.cover_image} alt={project.title} />
-      )}
-
       <div className="project-detail__tags">
         {project.tech_stack.map((tech) => (
           <span key={tech.id} className="tag">
@@ -44,6 +49,23 @@ export default function ProjectDetail() {
           </span>
         ))}
       </div>
+
+      {photos.length > 0 && (
+        <div className="photo-strip" role="list">
+          {photos.map((photo, i) => (
+            <button
+              key={i}
+              type="button"
+              role="listitem"
+              className="photo-strip__item"
+              onClick={() => setLightboxIndex(i)}
+              aria-label={`Открыть фото ${i + 1} из ${photos.length}`}
+            >
+              <img src={photo.src} alt={photo.caption || project.title} />
+            </button>
+          ))}
+        </div>
+      )}
 
       <p className="project-detail__description">{project.description}</p>
 
@@ -60,12 +82,13 @@ export default function ProjectDetail() {
         )}
       </div>
 
-      {project.gallery?.length > 0 && (
-        <div className="project-detail__gallery">
-          {project.gallery.map((img) => (
-            <img key={img.id} src={img.image} alt={img.caption || project.title} />
-          ))}
-        </div>
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={photos}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onNavigate={setLightboxIndex}
+        />
       )}
     </section>
   );
