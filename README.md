@@ -27,6 +27,7 @@
 | Backend | Django · Django REST Framework · SQLite · django-axes |
 | Frontend | React · Vite · React Router |
 | Дизайн | Собственная дизайн-система (CSS-переменные), Fraunces + Inter |
+| Тесты | Django TestCase / DRF APITestCase · Vitest + React Testing Library |
 
 ## 🚀 Быстрый старт
 
@@ -157,7 +158,22 @@ portfolio-website/
 - [x] Дизайн-система (light/dark), собственная типографика
 - [x] Адаптив под мобильные устройства
 - [x] Базовая безопасность
+- [x] Тесты (backend + frontend)
 - [ ] Наполнение реальным контентом
+- [ ] Деплой
+
+## 🧪 Тесты
+
+```bash
+# Backend (Django) — 20 тестов: модели, slug, API-фильтры, валидация фото
+cd backend
+python manage.py test
+
+# Frontend (Vitest + React Testing Library) — 32 теста: компоненты, тема, поиск/фильтр
+cd frontend
+npm run test          # разовый прогон
+npm run test:watch    # в режиме наблюдения при разработке
+```
 
 ## 📄 Лицензия
 
