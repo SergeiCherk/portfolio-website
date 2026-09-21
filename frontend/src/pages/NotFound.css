@@ -1,0 +1,33 @@
+.not-found {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 12vh 6vw;
+  text-align: center;
+}
+
+.not-found__code {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.not-found h1 {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+.not-found p {
+  color: var(--color-ink-soft);
+  margin-bottom: 24px;
+}
+
+.not-found__link {
+  text-decoration: none;
+  color: var(--color-ink);
+  border-bottom: 2px solid var(--color-accent);
+  font-weight: 500;
+}

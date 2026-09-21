@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchProjects } from "../api/projects";
 import siteConfig from "../content/site";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import "./Home.css";
 
 /**
@@ -9,6 +10,8 @@ import "./Home.css";
  * и подборка проектов, отмеченных «избранными» в админке.
  */
 export default function Home() {
+  useDocumentTitle(null); // на главной — просто "Портфолио", без приставки
+
   const [featured, setFeatured] = useState([]);
   const [loaded, setLoaded] = useState(false);
 

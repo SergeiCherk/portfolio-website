@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { fetchProject } from "../api/projects";
 import Lightbox from "../components/Lightbox";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import "./ProjectDetail.css";
 
 /** Страница одного проекта: описание, ссылки и лента фото с лайтбоксом. */
@@ -10,6 +11,8 @@ export default function ProjectDetail() {
   const [project, setProject] = useState(null);
   const [error, setError] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
+
+  useDocumentTitle(project?.title ?? "Проект");
 
   useEffect(() => {
     fetchProject(slug)

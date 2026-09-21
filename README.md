@@ -8,6 +8,7 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
+[![Тесты](https://github.com/SergeiCherk/portfolio-website/actions/workflows/tests.yml/badge.svg)](https://github.com/SergeiCherk/portfolio-website/actions/workflows/tests.yml)
 
 ---
 
@@ -18,6 +19,8 @@
 - **Страница проекта** — описание, ссылка на GitHub, горизонтальная лента фото с полноэкранным просмотром
 - **Админ-панель на русском** — добавление проектов, технологий и фото без единой строчки кода
 - **Светлая/тёмная тема** — переключатель в шапке, выбор запоминается
+- **Постраничная навигация** и корректная страница 404 для несуществующих адресов
+- **SEO-заготовки** — мета-описание, Open Graph, заголовок вкладки меняется на каждой странице
 - **Готово к продакшену** — защита от перебора пароля, лимиты на загрузку файлов, продовые security-заголовки «из коробки»
 
 ## 🛠 Технологии
@@ -126,16 +129,18 @@ frontend/src/styles/tokens.css
 
 ```
 portfolio-website/
-├── backend/                 # Django-проект
-│   ├── config/               # настройки, корневые URL
-│   └── projects/              # приложение: модели, API, админка
-├── frontend/                # React-приложение (Vite)
+├── .github/workflows/        # CI — автопрогон тестов на GitHub
+├── backend/                  # Django-проект
+│   ├── config/                 # настройки, корневые URL
+│   └── projects/                # приложение: модели, API, админка, тесты
+├── frontend/                 # React-приложение (Vite)
 │   └── src/
-│       ├── pages/             # Home, Projects, ProjectDetail
-│       ├── components/        # Navbar, Footer, ProjectCard, Lightbox...
-│       ├── content/            # site.js — весь личный контент
-│       ├── context/            # переключатель темы
-│       └── styles/             # design-токены
+│       ├── pages/               # Home, Projects, ProjectDetail, NotFound
+│       ├── components/          # Navbar, Footer, ProjectCard, Lightbox...
+│       ├── content/              # site.js — весь личный контент
+│       ├── context/              # переключатель темы
+│       ├── hooks/                # useDocumentTitle и другие хуки
+│       └── styles/               # design-токены
 └── README.md
 ```
 
@@ -158,9 +163,19 @@ portfolio-website/
 - [x] Дизайн-система (light/dark), собственная типографика
 - [x] Адаптив под мобильные устройства
 - [x] Базовая безопасность
-- [x] Тесты (backend + frontend)
+- [x] Тесты (backend + frontend) + CI на GitHub Actions
+- [x] SEO-мета-теги, свой favicon, страница 404, пагинация каталога проектов
 - [ ] Наполнение реальным контентом
 - [ ] Деплой
+
+## ⚙️ CI
+
+При каждом push и Pull Request в `main` на GitHub автоматически:
+- прогоняются backend-тесты (`python manage.py test`)
+- прогоняются frontend-тесты (`npm run test`) и проверяется сборка (`npm run build`)
+
+Конфигурация — в `.github/workflows/tests.yml`. Статус виден бейджем вверху этого README
+(не забудь заменить `твой-ник/portfolio-website` на путь к своему репозиторию).
 
 ## 🧪 Тесты
 

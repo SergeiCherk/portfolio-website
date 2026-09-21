@@ -2,14 +2,20 @@ import { useEffect, useState } from "react";
 import { fetchProjects, fetchTechStack } from "../api/projects";
 import ProjectCard from "../components/ProjectCard";
 import TechFilter from "../components/TechFilter";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import "./Projects.css";
 
-/** Каталог проектов: живой поиск с debounce и множественный фильтр по стеку. */
+/** Каталог проектов: живой поиск с debounce, фильтр по стеку и постраничная навигация. */
 export default function Projects() {
+  useDocumentTitle("Проекты");
+
   const [projects, setProjects] = useState([]);
   const [techOptions, setTechOptions] = useState([]);
   const [selectedTech, setSelectedTech] = useState([]);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrevious, setHasPrevious] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -22,20 +28,29 @@ export default function Projects() {
       });
   }, []);
 
-  // Проекты — перезагружаем при смене поиска или фильтра
+  // Смена поиска или фильтра — всегда возвращаемся на первую страницу результатов
+  useEffect(() => {
+    setPage(1);
+  }, [search, selectedTech]);
+
+  // Проекты — перезагружаем при смене поиска, фильтра или страницы
   useEffect(() => {
     setLoading(true);
     setError(null);
 
     const timeoutId = setTimeout(() => {
-      fetchProjects({ search, tech: selectedTech })
-        .then((data) => setProjects(data.results ?? data))
+      fetchProjects({ search, tech: selectedTech, page })
+        .then((data) => {
+          setProjects(data.results ?? data);
+          setHasNext(Boolean(data.next));
+          setHasPrevious(Boolean(data.previous));
+        })
         .catch(() => setError("Не удалось загрузить проекты. Проверь, запущен ли backend."))
         .finally(() => setLoading(false));
     }, 300); // небольшой debounce для поля поиска
 
     return () => clearTimeout(timeoutId);
-  }, [search, selectedTech]);
+  }, [search, selectedTech, page]);
 
   // Добавляет/убирает тег из фильтра — можно выбрать сразу несколько технологий
   function toggleTech(slug) {
@@ -72,6 +87,26 @@ export default function Projects() {
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>
+
+      {!loading && !error && (hasPrevious || hasNext) && (
+        <div className="projects-page__pagination">
+          <button
+            type="button"
+            onClick={() => setPage((p) => p - 1)}
+            disabled={!hasPrevious}
+          >
+            ← Назад
+          </button>
+          <span className="projects-page__page-number">Страница {page}</span>
+          <button
+            type="button"
+            onClick={() => setPage((p) => p + 1)}
+            disabled={!hasNext}
+          >
+            Далее →
+          </button>
+        </div>
+      )}
     </section>
   );
 }
